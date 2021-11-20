@@ -50,10 +50,6 @@ app.use((req, res, next) => {
 
 app.use("", feedRoutes);
 
-const MONGO_USERNAME = "yaseen";
-const MONGO_PASSWORD = "IgFKFZnnAScPDTdr";
-const MONGO_DBNAME = "messages";
-
 mongoose
   .connect(
     `mongodb+srv://${MONGO_USERNAME}:${MONGO_PASSWORD}@cluster0.tfkjg.mongodb.net/${MONGO_DBNAME}?retryWrites=true&w=majority`
