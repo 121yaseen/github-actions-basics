@@ -18,8 +18,8 @@ router.get("/posts", feedController.getPosts);
 //   feedController.postCreatePost
 // );
 
-// // GET /post/1
-// router.get("/post/:postId", feedController.getPost);
+// GET /post/60ae6a9a7a74e9151446eedb
+router.get("/post/:postId", feedController.getPost);
 
 // // PUT /post/1
 // router.put(
