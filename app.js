@@ -1,5 +1,8 @@
 const express = require("express");
 const path = require("path");
+const helmet = require("helmet");
+const morgan = require("morgan");
+const fs = require("fs");
 
 // For Working with MongoDB
 const mongoose = require("mongoose");
@@ -47,15 +50,27 @@ app.use((req, res, next) => {
     ),
     next();
 });
-
+// for using secure headers
+// kinda unnecessary for this small application, but anyway
+app.use(helmet());
 app.use("", feedRoutes);
+// Logging
+// Also kinda unnecessary, but wanted to try logging
+const accessLogStream = fs.createWriteStream(
+  path.join(__dirname, "access.log"),
+  { flags: "a" }
+);
+app.use(morgan("common", { stream: accessLogStream }));
+
+const connectionString =
+  `mongodb+srv://${process.env.MONGO_USERNAME}:` +
+  `${process.env.MONGO_PASSWORD}@cluster0.tfkjg.mongodb.net/` +
+  `${process.env.MONGO_DBNAME}?retryWrites=true&w=majority`;
 
 mongoose
-  .connect(
-    `mongodb+srv://${MONGO_USERNAME}:${MONGO_PASSWORD}@cluster0.tfkjg.mongodb.net/${MONGO_DBNAME}?retryWrites=true&w=majority`
-  )
+  .connect(connectionString)
   .then((result) => {
     console.log("Connected to DB");
-    app.listen(8080);
+    app.listen(process.env.PORT || 8080);
   })
   .catch((err) => console.log(err));
